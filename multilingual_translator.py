@@ -3,9 +3,6 @@ from langdetect import detect
 from groq import Groq
 from dotenv import load_dotenv
 
-# ===============================
-# LOAD ENV
-# ===============================
 
 load_dotenv()
 
@@ -66,11 +63,9 @@ def groq_translate_dual(text, source, target):
 
     print("Translation Similarity:", sim)
 
-    # If both agree → accept
     if sim >= 0.6:
         return t1
 
-    # Otherwise → safer one (shorter usually = less hallucination)
     return min([t1, t2], key=len)
 
 
@@ -260,7 +255,6 @@ def process_user_message(user_text, farmer_context):
 
     print("AI English Output:\n", ai_response_en)
 
-
     # 5. Validation
     safe = validate_response(
         ai_response_en,
@@ -268,12 +262,11 @@ def process_user_message(user_text, farmer_context):
     )
 
     if not safe:
-     revised = run_core_agent(
-        english_input + "\nPlease make it safer and remove chemicals.",
-        farmer_context
-    )
-
-    ai_response_en = revised
+        revised = run_core_agent(
+            english_input + "\nPlease make it safer and remove chemicals.",
+            farmer_context
+        )
+        ai_response_en = revised
 
 
     # 6. Translate Back
@@ -308,7 +301,10 @@ Last Action: Fertilizer Applied
 Weather: Low Rainfall
 """
 
-    user_input = "माझ्या शेतात खूप पाऊस पडतो आणि पाने हिरवी असतात. मला काय करायला हवे?"
+    user_input = input("Enter your question: ")
+
+    # user_input = "माझ्या शेतात पाणी नाही आणि पाने पिवळी आहेत. मला काय करायला हवे?"
+    #user_input = "कल बारिश होगी क्या? कपास अब फूलने की अवस्था में है?"
 
     response = process_user_message(
         user_input,
